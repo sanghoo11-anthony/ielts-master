@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 241, 245, 249;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: #f8fafc;
+  min-height: 100vh;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 하이라이트 텍스트 스타일 */
+.highlight-yellow {
+  background-color: #fef08a;
+  border-bottom: 2px solid #eab308;
+}
+
+.highlight-green {
+  background-color: #bbf7d0;
+  border-bottom: 2px solid #22c55e;
+}
+
+.highlight-blue {
+  background-color: #bfdbfe;
+  border-bottom: 2px solid #3b82f6;
+}
+
+.highlight-pink {
+  background-color: #fbcfe8;
+  border-bottom: 2px solid #ec4899;
+}
+
+/* 지문 내 근거 문장 강조 펄스 애니메이션 */
+@keyframes evidencePulse {
+  0%, 100% {
+    background-color: rgba(254, 240, 138, 0.4);
+    box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.5);
+  }
+  50% {
+    background-color: rgba(254, 240, 138, 0.95);
+    box-shadow: 0 0 0 8px rgba(234, 179, 8, 0.2);
+  }
+}
+
+.evidence-target {
+  animation: evidencePulse 2s ease-in-out infinite;
+  border-left: 4px solid #eab308;
+  padding-left: 8px;
+  border-radius: 4px;
+}
