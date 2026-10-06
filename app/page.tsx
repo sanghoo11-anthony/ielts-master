@@ -62,10 +62,26 @@ export default function DashboardPage() {
       ? (readingBands.reduce((a, b) => a + b, 0) / readingBands.length).toFixed(1)
       : '5.5';
 
-  const overallAvgBand = (
-    (parseFloat(avgWritingBand) + parseFloat(avgReadingBand)) /
-    2
-  ).toFixed(1);
+  // 평균 Speaking Band 계산
+  const speakingBands = speakingSubs
+    .filter((s) => s.evaluation?.overall_band)
+    .map((s) => s.evaluation.overall_band);
+  const avgSpeakingBand =
+    speakingBands.length > 0
+      ? (speakingBands.reduce((a, b) => a + b, 0) / speakingBands.length).toFixed(1)
+      : '5.5';
+
+  // 전체 과목 평균 추정 밴드 (Writing, Reading, Speaking 반영)
+  const validBandAverages = [
+    writingBands.length > 0 ? parseFloat(avgWritingBand) : null,
+    readingBands.length > 0 ? parseFloat(avgReadingBand) : null,
+    speakingBands.length > 0 ? parseFloat(avgSpeakingBand) : null,
+  ].filter((b): b is number => b !== null);
+
+  const overallAvgBand =
+    validBandAverages.length > 0
+      ? (validBandAverages.reduce((a, b) => a + b, 0) / validBandAverages.length).toFixed(1)
+      : ((parseFloat(avgWritingBand) + parseFloat(avgReadingBand) + parseFloat(avgSpeakingBand)) / 3).toFixed(1);
 
   const descriptor = getBandDescriptor(parseFloat(overallAvgBand));
 
@@ -135,7 +151,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats & Progression Overview */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {/* Card 1: Target Band */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
@@ -159,7 +175,7 @@ export default function DashboardPage() {
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              현재 추정 실력 (Overall)
+              현재 종합 실력 (Overall)
             </span>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
               <Trophy className="h-4 w-4" />
@@ -192,7 +208,7 @@ export default function DashboardPage() {
               ({writingSubs.length}회 작성)
             </span>
           </div>
-          <p className="mt-2 text-xs text-slate-500">4대 공식 기준 채점 반영</p>
+          <p className="mt-2 text-xs text-slate-500">4대 공식 기준 채점</p>
         </div>
 
         {/* Card 4: Reading Avg */}
@@ -214,6 +230,27 @@ export default function DashboardPage() {
             </span>
           </div>
           <p className="mt-2 text-xs text-slate-500">실전 환산표 기준</p>
+        </div>
+
+        {/* Card 5: Speaking Avg */}
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Speaking 평균 점수
+            </span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-600">
+              <Mic className="h-4 w-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="font-mono text-3xl font-black text-rose-600">
+              {avgSpeakingBand}
+            </span>
+            <span className="text-xs text-slate-400">
+              ({speakingSubs.length}회 대화)
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-slate-500">4대 기준 AI 평가</p>
         </div>
       </div>
 
@@ -247,6 +284,7 @@ export default function DashboardPage() {
               <li>Task 1 (150단어), Task 2 (250단어) 미달 감점 방지</li>
               <li>Task 1 세 가지 요구사항(Bullet points) 누락 없이 기재</li>
               <li>주어-동사 수일치 및 기본 시제 오류 최소화</li>
+              <li>Speaking Part 1 친숙한 일상 토픽 45초 답변 습관화</li>
             </ul>
           </div>
 
@@ -265,6 +303,7 @@ export default function DashboardPage() {
               <li>단순문 나열을 탈피하여 관계사절, 조건문, 분사구문 도입</li>
               <li>However, Furthermore 등 논리적 전환 장치 배치</li>
               <li>Reading 지문 내 Paraphrasing 표현 매칭 훈련</li>
+              <li>Speaking Part 2 Cue card 2분 롱턴 스피치 완주</li>
             </ul>
           </div>
 
@@ -283,6 +322,7 @@ export default function DashboardPage() {
               <li>원어민스러운 연어(Collocation) 및 정교한 어휘 구사</li>
               <li>자연스러운 단락 간 응집성 및 일관된 Tone(격식체) 유지</li>
               <li>Reading T/F/NG의 미묘한 Not Given 함정 완벽 판별</li>
+              <li>Speaking Part 3 심층 토론 및 유창성/담화표지어(Discourse Markers) 마스터</li>
             </ul>
           </div>
         </div>
