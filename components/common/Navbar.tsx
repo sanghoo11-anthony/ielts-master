@@ -14,6 +14,7 @@ import {
   HelpCircle,
   Sparkles,
   Bookmark,
+  Mic,
 } from 'lucide-react';
 import { writingRepository } from '@/lib/storage/writingRepository';
 import { vocabularyRepository } from '@/lib/storage/vocabularyRepository';
@@ -50,6 +51,7 @@ export default function Navbar() {
     { href: '/', label: '대시보드', icon: Trophy },
     { href: '/writing/lab', label: 'Writing Lab', icon: Sparkles },
     { href: '/reading/lab', label: 'Reading Lab', icon: BookOpen },
+    { href: '/speaking/lab', label: 'Speaking Lab', icon: Mic },
     { href: '/vocabulary', label: '단어장', icon: Bookmark, badge: savedCount > 0 ? savedCount : null },
     { href: '/writing', label: 'Writing 토픽', icon: PenTool },
     { href: '/reading', label: 'Reading 세트', icon: BookOpen },

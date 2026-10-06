@@ -21,20 +21,27 @@ import {
   ChevronRight,
   Flame,
   Bookmark,
+  Mic,
 } from 'lucide-react';
 import { vocabularyRepository } from '@/lib/storage/vocabularyRepository';
+import { getSpeakingStats, getAllSpeakingSubmissions } from '@/lib/storage/speakingRepository';
+import { SpeakingSubmission } from '@/types/speaking';
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [writingSubs, setWritingSubs] = useState<WritingSubmission[]>([]);
   const [readingSubs, setReadingSubs] = useState<ReadingSubmission[]>([]);
+  const [speakingSubs, setSpeakingSubs] = useState<SpeakingSubmission[]>([]);
   const [vocabCount, setVocabCount] = useState(0);
+  const [speakingCount, setSpeakingCount] = useState(0);
 
   useEffect(() => {
     writingRepository.getUserProfile().then(setProfile);
     writingRepository.getAllSubmissions().then(setWritingSubs);
     readingRepository.getAllSubmissions().then(setReadingSubs);
     vocabularyRepository.getStats().then((s) => setVocabCount(s.total));
+    getSpeakingStats().then((s) => setSpeakingCount(s.totalCount));
+    getAllSpeakingSubmissions().then(setSpeakingSubs);
   }, []);
 
   const targetBand = profile?.targetBand || 7.0;
@@ -99,6 +106,15 @@ export default function DashboardPage() {
             >
               <BookOpen className="h-4 w-4" />
               <span>Reading Lab (스플릿 시험)</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+
+            <Link
+              href="/speaking/lab"
+              className="inline-flex items-center gap-2 rounded-2xl bg-rose-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-rose-500/30 hover:bg-rose-700 transition-all"
+            >
+              <Mic className="h-4 w-4" />
+              <span>Speaking Lab (대화 & 피드백)</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
 
@@ -272,8 +288,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Recent Submissions History (Writing & Reading) */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      {/* Recent Submissions History (Writing, Reading, Speaking) */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Writing History */}
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
@@ -370,6 +386,59 @@ export default function DashboardPage() {
                     <ChevronRight className="h-4 w-4 text-slate-400" />
                   </div>
                 </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Speaking History (New) */}
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Mic className="h-4 w-4 text-rose-600" />
+              최근 Speaking 대화 이력
+            </h3>
+            <Link href="/speaking/lab" className="text-xs font-semibold text-rose-600 hover:underline">
+              Speaking Lab 이동
+            </Link>
+          </div>
+
+          {speakingSubs.length === 0 ? (
+            <div className="py-8 text-center text-xs text-slate-400">
+              아직 진행한 Speaking 대화가 없습니다. 실전 대화 피드백을 시작해보세요!
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {speakingSubs.slice(0, 3).map((sub) => (
+                <div
+                  key={sub.id}
+                  className="flex items-center justify-between rounded-xl bg-slate-50 p-3.5 transition-all hover:bg-rose-50/50 hover:border-rose-200 border border-slate-100"
+                >
+                  <div className="max-w-[70%]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold text-rose-600 uppercase">
+                        {sub.part}
+                      </span>
+                      {sub.isKoreanResponse && (
+                        <span className="rounded bg-indigo-100 px-1 text-[9px] font-bold text-indigo-700">
+                          한국어 변환
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs font-semibold text-slate-800 line-clamp-1">
+                      {sub.questionText}
+                    </p>
+                    <span className="text-[10px] text-slate-400">
+                      {new Date(sub.submittedAt).toLocaleDateString('ko-KR')}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-lg bg-rose-600 px-2.5 py-1 text-xs font-bold text-white">
+                      Band {sub.evaluation.overall_band.toFixed(1)}
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
           )}
