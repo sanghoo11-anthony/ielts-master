@@ -3,6 +3,7 @@ import { WritingSubmission } from '@/types/writing';
 import { ReadingSubmission, PassageAnnotation } from '@/types/reading';
 import { VocabularyItem } from '@/types/vocabulary';
 import { SpeakingSubmission } from '@/types/speaking';
+import { ListeningSubmission } from '@/types/listening';
 
 export interface UserProfile {
   id: string; // 'current-user'
@@ -20,6 +21,7 @@ export class IELTSDatabase extends Dexie {
   userProfile!: Table<UserProfile, string>;
   vocabulary!: Table<VocabularyItem, string>;
   speakingSubmissions!: Table<SpeakingSubmission, string>;
+  listeningSubmissions!: Table<ListeningSubmission, string>;
 
   constructor() {
     super('IELTSPrepDB');
@@ -34,6 +36,9 @@ export class IELTSDatabase extends Dexie {
     });
     this.version(3).stores({
       speakingSubmissions: 'id, topicId, part, submittedAt, isKoreanResponse',
+    });
+    this.version(4).stores({
+      listeningSubmissions: 'id, testId, section, submittedAt, bandScore',
     });
   }
 }

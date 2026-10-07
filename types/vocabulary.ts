@@ -16,7 +16,7 @@ export interface VocabularyItem {
   bandLevel: string; // e.g. 'Band 7.0+', 'Band 7.5+', 'Band 8.0+'
   isMastered: boolean;
   createdAt: string;
-  sourceType: 'reading' | 'writing' | 'speaking' | 'manual';
+  sourceType: 'reading' | 'writing' | 'speaking' | 'listening' | 'manual';
   sourceTitle?: string;
 }
 
@@ -24,7 +24,7 @@ export interface WordLookupRequest {
   word: string;
   sentence?: string;
   sourceTitle?: string;
-  sourceType?: 'reading' | 'writing' | 'speaking' | 'manual';
+  sourceType?: 'reading' | 'writing' | 'speaking' | 'listening' | 'manual';
   customApiKey?: string;
 }
 

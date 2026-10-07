@@ -24,7 +24,7 @@ interface WordLookupModalProps {
   word: string | null;
   sentence?: string;
   sourceTitle?: string;
-  sourceType?: 'reading' | 'writing' | 'speaking' | 'manual';
+  sourceType?: 'reading' | 'writing' | 'speaking' | 'listening' | 'manual';
   onWordSavedChange?: () => void;
 }
 
